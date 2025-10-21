@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scuba Brazzers — дайвинг-комьюнити</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#0a0b12; --deep:#0f1220; --steel:#131831; --text:#f6f7ff; --muted:#9aa4bd;
+      --purple:#9326e3; --magenta:#d332ff; --teal:#22d3c5; --blood:#ff4b6e;
+      --radius:20px; --shadow:0 16px 40px rgb(0 0 0 / .45);
+      --glow:0 0 28px rgba(147,38,227,.45), 0 0 36px rgba(34,211,197,.28);
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 1200px at 60% -10%, rgba(147,38,227,.18) 0%, transparent 55%),
+        radial-gradient(900px 900px at -10% 40%, rgba(34,211,197,.14) 0%, transparent 55%),
+        var(--ink);
+      overflow-x:hidden;
+    }
+    /* background bubbles */
+    .bubbles{ pointer-events:none; position:fixed; inset:0; overflow:hidden; z-index:0; }
+    .bubble{ position:absolute; bottom:-100px; width:10px; height:10px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.7), rgba(255,255,255,.05));
+      box-shadow: 0 0 25px rgba(34,211,197,.25);
+      animation: rise linear infinite; opacity:.25; filter: drop-shadow(0 0 6px rgba(147,38,227,.35)); }
+    @keyframes rise{ 0%{ transform: translateY(0) translateX(0) scale(1);} 100%{ transform: translateY(-120vh) translateX(var(--drift)) scale(1.8);} }
+
+    /* logo layer */
+    .logo-layer{ position:relative; display:inline-block; will-change:transform, filter; }
+    .logo-layer.bob{ animation: bob 6.5s ease-in-out infinite; }
+    .logo-layer.pulse{ animation: pulseGlow 4.8s ease-in-out infinite; }
+    .logo-img{ width:min(980px,94vw); height:auto; display:block;
+      filter: drop-shadow(0 0 22px rgba(147,38,227,.45)) drop-shadow(0 0 26px rgba(34,211,197,.3)); }
+    @keyframes bob{ 0%{ transform: translateY(0) rotate(0deg) scale(1);} 50%{ transform: translateY(-7px) rotate(-0.35deg) scale(1.01);} 100%{ transform: translateY(0) rotate(0deg) scale(1);} }
+    @keyframes pulseGlow{ 0%{ filter: drop-shadow(0 0 10px rgba(147,38,227,.25)) drop-shadow(0 0 14px rgba(34,211,197,.18)); }
+                           50%{ filter: drop-shadow(0 0 22px rgba(147,38,227,.55)) drop-shadow(0 0 26px rgba(34,211,197,.38)); }
+                           100%{ filter: drop-shadow(0 0 10px rgba(147,38,227,.25)) drop-shadow(0 0 14px rgba(34,211,197,.18)); } }
+    @media (prefers-reduced-motion: reduce){ .logo-layer{ animation:none !important } .bubble{ animation:none } }
+
+    header{position:sticky; top:0; z-index:5; backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(10,11,18,.85), rgba(10,11,18,.25));
+      border-bottom:1px solid rgba(255,255,255,.05); }
+    .wrap{max-width:1200px; margin:0 auto; padding:20px}
+
+    .brand{display:flex; align-items:center; gap:18px}
+    .brand .title{font-family:'Russo One', sans-serif; letter-spacing:.6px; line-height:1; font-size:28px; text-transform:uppercase}
+
+    nav{margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap}
+    nav a{text-decoration:none; color:var(--text); opacity:.95; padding:10px 16px; border-radius:999px; border:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(180deg, rgba(25,30,55,.9), rgba(18,22,43,.6)); box-shadow:var(--shadow); transition:.25s ease; }
+    nav a:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(147,38,227,.25); border-color: rgba(147,38,227,.55);}    
+
+    .hero{position:relative; z-index:1; padding:36px 0 18px; text-align:center}
+    .hero h1{font-family:'Russo One', sans-serif; font-size: clamp(30px, 5.6vw, 64px);
+      -webkit-text-stroke: 1px rgba(255,255,255,.08);
+      text-shadow: 0 0 22px rgba(147,38,227,.35), 0 0 28px rgba(34,211,197,.25);
+      margin:14px 0 10px; letter-spacing:.6px; }
+    .hero p{max-width:900px; margin:0 auto 18px; color:var(--muted); font-size:18px}
+    .cta{display:inline-flex; gap:12px; margin-top:8px}
+    .btn{display:inline-flex; align-items:center; gap:10px; text-decoration:none; font-weight:700;
+      padding:12px 18px; border-radius:14px; border:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(35,42,80,.95), rgba(20,24,48,.65)); box-shadow: var(--glow);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; color: var(--text); }
+    .btn:hover{ transform: translateY(-3px) scale(1.02); box-shadow: 0 0 28px rgba(34,211,197,.5), 0 0 36px rgba(147,38,227,.45); border-color: rgba(34,211,197,.55);}   
+
+    section{position:relative; z-index:1; padding:32px 0}
+    .card{background:linear-gradient(180deg, rgba(16,19,39,.92), rgba(12,15,30,.92)); border:1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow:hidden; }
+    .card-header{ display:flex; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid rgba(255,255,255,.06);
+      background: linear-gradient(180deg, rgba(27,21,48,.95), rgba(17,19,36,.97)); }
+    .card-header h3{margin:0; font-family:'Russo One', sans-serif; letter-spacing:.4px}
+    .card-body{padding:18px 20px}
+
+    .about-grid{display:grid; grid-template-columns:1fr; gap:18px}
+    @media(min-width:900px){ .about-grid{grid-template-columns:1.2fr .8fr} }
+
+    .news-list{display:grid; grid-template-columns:1fr; gap:14px; list-style:none; padding:0; margin:0}
+    .news-item{padding:14px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(180deg, rgba(23,28,58,.85), rgba(14,18,40,.85)); display:flex; flex-direction:column; gap:6px; }
+    .news-item a{color:var(--text); text-decoration:none}
+    .news-item a:hover{ text-decoration: underline; }
+    .news-meta{font-size:12px; color:var(--muted)}
+    .refresh{margin-left:auto}
+
+    .gallery-grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:14px; margin-top:12px}
+    .tile{position:relative; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.06); background: var(--steel); box-shadow: var(--shadow);}
+    .tile img{width:100%; height:160px; object-fit:cover; display:block}
+    .tile .name{position:absolute; left:8px; bottom:8px; right:8px; padding:6px 10px; font-weight:700; letter-spacing:.2px;
+      border-radius:8px; background: rgba(10,12,22,.6); border:1px solid rgba(255,255,255,.1); backdrop-filter: blur(6px);}
+    .tile button.delete{position:absolute; top:8px; right:8px; border:none; border-radius:10px; padding:6px 8px; cursor:pointer; background: rgba(255,75,110,.15); color:#fff; font-weight:700; box-shadow: inset 0 0 12px rgba(255,75,110,.45);}    
+    .form-row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+    .form-row input[type="text"]{flex:1; min-width:200px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.08); background:#11162a; color:var(--text)}
+    .form-row input[type="file"]{display:block; padding:8px; border-radius:10px; border:1px dashed rgba(255,255,255,.15); background:#0f152b; color:var(--muted)}
+    .small{font-size:12px; color:var(--muted)}
+
+    footer{margin-top:30px; padding:30px 0; text-align:center; color:var(--muted)}
+    footer a{color:var(--teal); text-decoration:none}
+    footer a:hover{text-decoration:underline}
+
+    .reveal{opacity:0; transform: translateY(16px); transition: .6s ease}
+    .reveal.show{opacity:1; transform:none}
+
+    .edge{ border:2px solid transparent; background:
+      linear-gradient(var(--ink), var(--ink)) padding-box,
+      linear-gradient(120deg, var(--purple), var(--magenta), var(--teal)) border-box; border-radius: var(--radius); }
+  </style>
+</head>
+<body>
+  <div class="bubbles" id="bubbles"></div>
+
+  <header>
+    <div class="wrap edge" style="display:flex; gap:16px; align-items:center; padding:14px 20px;">
+      <div class="brand">
+        <div class="logo-layer bob pulse" style="width:min(380px,40vw)">
+          <img class="logo-img" src="sb.svg" alt="Scuba Brazzers логотип"/>
+        </div>
+        <div class="title">SCUBA BRAZZERS</div>
+      </div>
+      <nav style="margin-left:auto">
+        <a href="#about">О нас</a>
+        <a href="#news">Новости</a>
+        <a href="#gallery">Галерея</a>
+        <a href="https://t.me/ScuBrazz" target="_blank" rel="noopener">Telegram</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="logo-layer bob pulse" style="margin:8px auto 2px">
+        <img class="logo-img" src="sb.svg" alt="Scuba Brazzers — логотип"/>
+      </div>
+      <h1>Дайвинг-комьюнити для своих</h1>
+      <p>Мы — некоммерческая команда энтузиастов, которые ныряют ради удовольствия и развития.
+         В Scuba Brazzers есть любители <strong>рекреационного</strong> дайвинга и фанаты <strong>технического</strong> —
+         глубоководного и пещерного. Дружим с океаном, уважаем безопасность и делимся опытом.</p>
+      <div class="cta">
+        <a class="btn" href="https://t.me/ScuBrazz" target="_blank" rel="noopener">Вступить в Telegram</a>
+        <a class="btn" href="#gallery">Добавить фото</a>
+      </div>
+    </section>
+
+    <section id="about" class="wrap reveal">
+      <div class="about-grid">
+        <div class="card edge">
+          <div class="card-header"><h3>О нас</h3></div>
+          <div class="card-body">
+            <p><strong>Scuba Brazzers</strong> — это сообщество, а не бизнес. Мы не продаём туры и не занимаемся коммерцией.
+              Вместо этого организуем совместные погружения, тренировки и обмен знаниями. У нас найдутся и лёгкие
+              релакс-дайвы на красивых рифах, и серьёзные проекты: <em>глубоководные</em> и <em>пещерные</em> погружения.</p>
+            <p>Мы придерживаемся культуры безопасности: планирование по газам и времени, бережное отношение к природе
+              и уважение к каждому участнику — независимо от уровня.</p>
+          </div>
+        </div>
+        <div class="card edge">
+          <div class="card-header"><h3>Философия</h3></div>
+          <div class="card-body">
+            <ul>
+              <li>Некоммерческое сообщество — ныряем для себя и в своё удовольствие.</li>
+              <li>Рекреационный и технический дайвинг, включая глубоководные и пещерные проекты.</li>
+              <li>Поддержка новичков и обмен опытом между продвинутыми дайверами.</li>
+              <li>Экология и этика: принцип «не оставляй следов».</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="news" class="wrap reveal">
+      <div class="card edge">
+        <div class="card-header" style="gap:12px">
+          <h3>Актуальные новости дайвинга</h3>
+          <button id="refreshNews" class="btn refresh" title="Обновить новости">Обновить</button>
+          <span id="newsStatus" class="small"></span>
+        </div>
+        <div class="card-body">
+          <p class="small">Лента подгружается из открытых источников (RSS). Если прокси временно недоступны, будет показана офлайн-заготовка.</p>
+          <ul class="news-list" id="newsList">
+            <li class="news-item">Загрузка новостей…</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="wrap reveal">
+      <div class="card edge">
+        <div class="card-header"><h3>Галерея участников</h3></div>
+        <div class="card-body">
+          <form id="galleryForm" class="form-row">
+            <input type="file" id="photoInput" accept="image/*" required />
+            <input type="text" id="nameInput" placeholder="Ваше имя или никнейм" maxlength="40" required />
+            <button class="btn" type="submit">Добавить</button>
+            <button class="btn" type="button" id="clearGallery" title="Очистить галерею">Очистить</button>
+          </form>
+          <p class="small">Фотографии и имена сохраняются локально в вашем браузере (LocalStorage). Их видите вы и те, кто откроет этот файл на вашем устройстве/хостинге.</p>
+          <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Сделано с любовью к океану • <a href="https://t.me/ScuBrazz" target="_blank" rel="noopener">наш Telegram</a>
+  </footer>
+
+  <script>
+    // ===== Background bubbles =====
+    (function() {
+      const container = document.getElementById('bubbles');
+      const count = 40;
+      for (let i=0;i<count;i++) {
+        const d = document.createElement('div');
+        d.className='bubble';
+        const left = Math.random()*100;
+        const size = 6 + Math.random()*14;
+        const duration = 12 + Math.random()*20;
+        d.style.left = left + 'vw'; d.style.width = size + 'px'; d.style.height = size + 'px';
+        d.style.animationDuration = duration + 's'; d.style.setProperty('--drift', (Math.random()*60-30)+'px');
+        container.appendChild(d);
+      }
+    })();
+
+    // ===== Reveal on scroll =====
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if (e.isIntersecting) e.target.classList.add('show'); }); }, {threshold:.1});
+    revealEls.forEach(el=>io.observe(el));
+
+    // ===== NEWS (resilient + auto-refresh) =====
+    const RSS_FEEDS = ['https://www.deeperblue.com/feed/','https://www.scubadivermag.com/feed/','https://www.divenewswire.com/feed/'];
+    const NEWS_KEY = 'sb_news_cache_v2';
+    const newsList = document.getElementById('newsList');
+    const refreshBtn = document.getElementById('refreshNews');
+    const newsStatus = document.getElementById('newsStatus');
+    function setStatus(msg){ newsStatus.textContent = msg; }
+
+    function renderNews(items) {
+      newsList.innerHTML = '';
+      items.slice(0, 12).forEach(item => {
+        const li = document.createElement('li'); li.className='news-item';
+        const a = document.createElement('a'); a.href = item.link || '#'; a.target='_blank'; a.rel='noopener'; a.textContent = item.title || 'Без названия';
+        const meta = document.createElement('div'); meta.className='news-meta'; meta.textContent = item.date ? new Date(item.date).toLocaleString('ru-RU') : '';
+        li.appendChild(a); li.appendChild(meta); newsList.appendChild(li);
+      });
+      if (!items.length) newsList.innerHTML = '<li class="news-item">Нет свежих новостей. Попробуйте позже.</li>';
+    }
+
+    async function fetchWithTimeout(resource, options = {}){ const { timeout = 12000 } = options; const controller = new AbortController(); const id = setTimeout(() => controller.abort(), timeout); try{ const res = await fetch(resource, { ...options, signal: controller.signal }); return res; } finally { clearTimeout(id); } }
+
+    async function fetchTextFallback(url){
+      const clean = url.replace(/^https?:\/\//,'');
+      const candidates = [
+        { type:'allorigins-json', u:`https://api.allorigins.win/get?url=${encodeURIComponent(url)}` },
+        { type:'allorigins-raw', u:`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}` },
+        { type:'jina', u:`https://r.jina.ai/http://${clean}` },
+        { type:'isogit', u:`https://cors.isomorphic-git.org/${url}` },
+        { type:'thingproxy', u:`https://thingproxy.freeboard.io/fetch/${url}` }
+      ];
+      let lastErr; for (const c of candidates){ try { const res = await fetchWithTimeout(c.u); if (!res.ok) throw new Error(`HTTP ${res.status}`); if (c.type === 'allorigins-json'){ const j = await res.json(); return j.contents; } return await res.text(); } catch(e){ lastErr = e; } }
+      throw lastErr || new Error('Все прокси недоступны');
+    }
+
+    function parseRSSorAtom(text){
+      const xml = new window.DOMParser().parseFromString(text, 'text/xml');
+      if (xml.getElementsByTagName('parsererror').length){ return []; }
+      const items = [];
+      xml.querySelectorAll('item').forEach(it=>{ items.push({ title: it.querySelector('title')?.textContent?.trim() || 'Без названия', link: it.querySelector('link')?.textContent?.trim() || '#', date: new Date(it.querySelector('pubDate')?.textContent || Date.now()).toISOString() }); });
+      xml.querySelectorAll('entry').forEach(it=>{ let link = it.querySelector('link[rel="alternate"]')?.getAttribute('href') || it.querySelector('link')?.getAttribute('href') || '#'; items.push({ title: it.querySelector('title')?.textContent?.trim() || 'Без названия', link, date: new Date(it.querySelector('updated')?.textContent || it.querySelector('published')?.textContent || Date.now()).toISOString() }); });
+      return items;
+    }
+
+    function normalizeAndDedup(list){ const map = new Map(); list.forEach(it=>{ if (it.link && !map.has(it.link)) map.set(it.link, it); }); return [...map.values()].sort((a,b)=> new Date(b.date)-new Date(a.date)); }
+
+    let lastUpdate = 0;
+    async function loadNews(force=false) {
+      setStatus('загрузка…');
+      try { const cached = localStorage.getItem(NEWS_KEY); if (!force && cached) { const obj = JSON.parse(cached); const age = Date.now() - obj.savedAt; if (age < 4*60*60*1000) { renderNews(obj.items); setStatus('из кэша'); lastUpdate = Date.now(); return; } } } catch {}
+      try { const all = []; for (const url of RSS_FEEDS){ try{ const text = await fetchTextFallback(url); all.push(...parseRSSorAtom(text)); } catch(e){ console.warn('feed failed', url, e); } }
+        let items = normalizeAndDedup(all); if (!items.length){ items = [ {title:'Офлайн-режим: пример новости сообщества', link:'#', date:new Date().toISOString()}, {title:'Совет дня: проверьте давление в баллонах и план деко', link:'#', date:new Date(Date.now()-3600e3).toISOString()} ]; setStatus('офлайн-заголовки'); } else { setStatus('обновлено'); }
+        renderNews(items); localStorage.setItem(NEWS_KEY, JSON.stringify({items, savedAt: Date.now()})); lastUpdate = Date.now();
+      } catch (e) { console.error(e); setStatus('ошибка сети'); newsList.innerHTML = '<li class="news-item">Не удалось загрузить новости (прокси или сеть недоступны). Попробуйте позже.</li>'; }
+    }
+    refreshBtn.addEventListener('click', ()=>loadNews(true));
+    loadNews();
+
+    // Auto-refresh every 3 hours when tab is active
+    const AUTO_REFRESH_MS = 3*60*60*1000;
+    setInterval(()=>{ if(!document.hidden) loadNews(true); }, AUTO_REFRESH_MS);
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && Date.now()-lastUpdate>4*60*60*1000) loadNews(true); });
+
+    // ===== smoke tests in console =====
+    (function tests(){
+      console.log('%cRunning smoke tests for news parser…','color:#22d3c5');
+      const rssSample = `<?xml version="1.0"?><rss><channel><item><title>A</title><link>u1</link><pubDate>Wed, 21 Oct 2025 10:00:00 GMT</pubDate></item><item><title>A-dup</title><link>u1</link><pubDate>Wed, 21 Oct 2025 09:00:00 GMT</pubDate></item></channel></rss>`;
+      const atomSample = `<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"><entry><title>B</title><link href="u2"/><updated>2025-10-21T10:30:00Z</updated></entry></feed>`;
+      const rssItems = parseRSSorAtom(rssSample); const atomItems = parseRSSorAtom(atomSample);
+      console.assert(rssItems.length===2,'RSS items parsed');
+      console.assert(atomItems.length===1,'Atom entries parsed');
+      const normalized = normalizeAndDedup([...rssItems, ...atomItems]);
+      console.assert(normalized.length===2,'Deduplicated by link');
+      console.assert(normalized[0].link==='u2','Sorted by date desc');
+      console.log('%cAll tests passed','color:#9326e3');
+    })();
+  </script>
+</body>
+</html>
